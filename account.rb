@@ -21,6 +21,7 @@ class Account
   end
 
   def deposit!(amount)
+    valid_transaction?(amount)
     raise NegativeDepositError if amount < 0
     add_transaction(amount)
 
@@ -28,11 +29,18 @@ class Account
   end
 
   def withdraw!(amount)
-    amount = -amount if amount > 0
-    add_transaction(amount)
+      valid_transaction?(amount)
+      amount = -amount if amount > 0
+      add_transaction(amount)
 
-    balance
+      balance
   end
+
+  def valid_transaction?(t)
+    raise InvalidTransactionTypeError unless t.is_a? Numeric
+  end
+
+
 
 private
 
@@ -58,3 +66,4 @@ class InvalidAccountNumberError < StandardError; end
 class NegativeDepositError < StandardError; end
 class OverdraftError < StandardError; end
 class InvalidStartingBalance < StandardError; end
+class InvalidTransactionTypeError < StandardError; end

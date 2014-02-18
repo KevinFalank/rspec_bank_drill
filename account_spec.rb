@@ -59,11 +59,17 @@ describe Account do
         expect{ account.deposit!(-100) }.to raise_error(NegativeDepositError)
       end
     end
+
+     context "with invalid input" do
+      it "raises an argument error when given an invalid deposit type" do
+        expect {account.deposit!("a")}.to raise_error(InvalidTransactionTypeError)
+      end
+    end
   end
 
   describe "#withdraw!" do
     context "with valid input causing overdraft" do
-      it "returns the current account balance" do
+      it "raises an argument error when given an withdrawl amount greater than current balance" do
         expect {account.withdraw!(100)}.to raise_error(OverdraftError)
       end
     end
@@ -75,8 +81,8 @@ describe Account do
     end
 
     context "with invalid input" do
-      it "returns the current account balance" do
-        expect {account.withdraw!("a")}.to raise_error(ArgumentError)
+      it "raises an argument error when given an invalid withdraw type" do
+        expect {account.withdraw!("a")}.to raise_error(InvalidTransactionTypeError)
       end
     end
   end
